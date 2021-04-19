@@ -1,0 +1,66 @@
+과제이름  : mini_paint
+예상파일 : *.c *.h
+허용함수 : fopen, fread, fscanf, fclose, write, malloc, calloc, realloc, free, memset, powf, sqrtf
+--------------------------------------------------------------------------------------
+
+"operation file"을 읽고 터미널에 결과를 출력하는 프로그램을 만들어라
+
+프로그램은 인자 하나를 받아야되는데, 그 인자는 "operation file"의 경로임
+민약 프로그램에 인자가 없거나 1개보다 많은값이 들어오면, STDOUT에 "Error: argument"와 개행을 출력 해야함
+
+$> ./mini_paint | cat -e
+Error: argument$
+$> ./mini_paint do not fear mathematics | cat -e
+Error: argument$
+$>
+
+"operation file"을 열거나 읽을때 문제가 발생하면, STDOUT에 "Error: Operation file corrupted"와 개행을 출력 해야함
+
+"operation file"은 여러 line들로 이루어져있는데, 하나의 line이 하나의 operation을 함
+line이 올바르지 않다면 에러임
+에러가 있으면 프로그램은 1을 반환 해야함
+에러가 없으면 프로그램은 0을 반환 해야함
+마지막 line은 개행이 있을수도 없을수도 있음
+line들을 순서대로 읽어야 하므로, operation도 같은 순서대로 실행 되어야함
+line에서 각 변수 사이에는 space가 하나 있어야함
+
+WIDTH HEIGHT BACKGROUND_CHAR
+draw zone은 파일의 첫번째 line에 정의함. 프로그램은 draw zone 외부에는 아무것도 표시하면 안됨.
+- WIDTH : draw zone의 너비는 0초과 300이하 이어야함
+- HEIGHT : draw zone의 높이는 0초과 300이하 이어야함
+- BACKGROUND_CAR : 빈공간에 채워질 문자
+
+c X Y RADIUS CHAR
+이 operation은 테두리만 있는 비어있는 원을 그림
+- c : 테두리만 있는 비어있는 원을 그림
+- X : 실수형 변수로, 원 중심의 x좌표를 나타냄
+- Y : 실수형 변수로, 원 중심의 y좌표를 나타냄
+- RADIUS :0이 아닌 실수형 변수로, 원의 반지름
+- CHAR : 그려지는 문자
+
+C X Y RADIUS CHAR
+이 operation은 테두리만 있는 비어있는 원을 그림
+- C : 꽉찬 원을 그림
+- X : 실수형 변수로, 원 중심의 x좌표를 나타냄
+- Y : 실수형 변수로, 원 중심의 y좌표를 나타냄
+- RADIUS :0이 아닌 실수형 변수로, 원의 반지름
+- CHAR : 그려지는 문자
+
+
+draw zone은 하나의 문자를 포함할 수 있는 사각형으로 나뉨(터미널을 사용하기 때문에 ...), 앞으로는 그 사각형을 픽셀이라고 칭함
+쉽게 만들기위해, 왼쪽 상단 모서리만 이용해서 해당 픽셀이 직사각형 안에 있는지 없는지 알 수 있음
+픽셀의 왼쪽 상단 모서리와 원의 중심 사이의 거리가 원의 반지름 이하면, 픽셀은 원의 일부임
+그리고 :
+픽셀의 왼쪽 상단 모서리 에서부터 원 테두리까지의 거리가 1이상이면 픽셀은 빈 원의 일부가 아님
+픽셀의 왼쪽 상단 모서리 에서부터 원 테두리까지의 거리가 1미만이면 픽셀은 빈 원의 일부임
+
+몇몇 line을 통해 생기는 이미지를 봐라. 이미지는 터미널에 표시가됨. 너비가 5이고, 높이가 3인 draw zone 이라고 가정하자
+다음 설명을 이해하는데 도움이 되도록 다른 문자로 예시를 듬
+- operation : C 1.5 1.5 1 0 @ (핑크색 원)
+-- 이미지 안의 글자 'b', 'c', 'B', 'C'가 @로 대체 된다는 뜻
+
+our_mini_paint를 찾아라, operation_file.sample는 그것을 테스트하는 데 도움이 될것임
+
+Hint:
+point 2개를 (Xa,Ya)와 (Xb,Yb)라 하자
+다음의 공식으로 두 point간의 거리를 구할수 있음 : sqrt((Xa - Xb) * (Xa - Xb) + (Ya - Yb) * (Ya - Yb))
